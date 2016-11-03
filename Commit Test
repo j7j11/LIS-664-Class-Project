@@ -10,7 +10,7 @@ while current_page <= 50:
 
     url = "https://www.amazon.com/All-New-Echo-Dot-2nd-Generation/product-reviews/B01DFKC2SO/ref=cm_cr_getr_d_paging_btm_"+str(current_page)+"?ie=UTF8&reviewerType=all_reviews&showViewpoints=1&sortBy=helpful&pageNumber="+str(current_page)
     
-    print("Scraping....Page " + str(current_page))
+    print("Downloading " + str(current_page))
 
     amazon_page = requests.get(url)
 

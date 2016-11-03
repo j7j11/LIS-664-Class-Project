@@ -1,0 +1,46 @@
+
+from bs4 import BeautifulSoup
+
+import requests, json
+
+scraped_review = []
+current_page = 1
+
+while current_page <= 50:
+
+    url = "https://www.amazon.com/All-New-Echo-Dot-2nd-Generation/product-reviews/B01DFKC2SO/ref=cm_cr_getr_d_paging_btm_"+str(current_page)+"?ie=UTF8&reviewerType=all_reviews&showViewpoints=1&sortBy=helpful&pageNumber="+str(current_page)
+    
+    print("Scraping....Page " + str(current_page))
+
+    amazon_page = requests.get(url)
+
+    page_html = amazon_page.text
+
+    soup = BeautifulSoup(page_html, "html.parser")
+
+    review_sect = soup.find_all("div", attrs = {"data-hook":"review", "class":"a-section review"})
+
+    for x in review_sect:
+
+        author = x.find("a", attrs = {"data-hook":"review-author", "class":"a-size-base a-link-normal author"})
+        review = x.find("span", attrs = {"data-hook":"review-body", "class":"a-size-base review-text"})
+        date = x.find("span", attrs = {"data-hook":"review-date", "class":"a-size-base a-color-secondary review-date"})
+
+        review_dict = {"Author": author.text, "Date":date.text, "Review":review.text }
+        scraped_review.append(review_dict)
+
+    current_page = current_page + 1
+
+with open('echo_review.json', 'w') as f:
+    f.write(json.dumps(scraped_review,indent=4))
+
+
+
+
+
+
+
+
+
+
+
